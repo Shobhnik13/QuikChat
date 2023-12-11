@@ -1,6 +1,9 @@
+import { db } from '@/lib/db'
 import Image from 'next/image'
 
-export default function Home() {
+export default async function Home() {
+  await db.set('elvis-bhai','sishtam')
+  
   return (
     <div className='text-red-500 text-5xl'>
       hiiiii
