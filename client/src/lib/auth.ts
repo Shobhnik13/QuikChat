@@ -49,5 +49,42 @@ export const authOptions:NextAuthOptions={
         })
     ],
 
-    
+    // callbacks
+    callbacks:{
+        async jwt({ token, user }) {
+        //if there is a user already in the db
+        // so we will first get the user from db by db.get(`user:${token.id}`)
+        // this id is coming from the id that our redis upstash adapter has set while updating user to db
+        const dbUser=await (db.get(`user:${token.id}`)) as UserType | null
+
+
+        // if user doesnt exist in db 
+        if(!dbUser){
+            token.id=user!.id
+            return token
+        }
+        //if there is a user then return user 
+        return{
+            id:dbUser.id,
+            name:dbUser.name,
+            email:dbUser.email,
+            picture:dbUser.image
+        }    
+    },
+        async session({ session, token, user }) {
+            // Send properties to the client/frontend, like an access_token and user id from a provider.
+            if(token){
+                session.user.id=token.id,
+                session.user.name=token.name,
+                session.user.image=token.picture,
+                session.user.email=token.email
+            }
+            return session
+          },
+        //   whenever the user successfully signed in
+        // we need to redirect them 
+        redirect(){
+            return '/dashboard'
+        }
+    }  
 }
