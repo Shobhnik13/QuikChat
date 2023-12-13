@@ -84,7 +84,7 @@ export const authOptions:NextAuthOptions={
         //   whenever the user successfully signed in
         // we need to redirect them 
         redirect(){
-            return '/dashboard'
+            return '/'
         }
     }  
 }

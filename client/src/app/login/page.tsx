@@ -1,15 +1,20 @@
 'use client'
 
-import { Button } from "@/src/components/ui/button"
+import Button from "@/src/components/ui/button"
+import { signIn } from "next-auth/react"
 import { useState } from "react"
+import {toast} from "react-hot-toast"
 
 const Page = () => {
     const [isLoading,setIsLoading]=useState<boolean>(false)
     const loginWithGoogle=async()=>{
+        setIsLoading(true)
         try{
-
+            await signIn('google')
         }catch(error:any){
-            throw new Error(`${error.mes}`)
+            toast.error('Something went wrong !')    
+        }finally{
+            setIsLoading(false)
         }
     }
   return (
@@ -20,7 +25,7 @@ const Page = () => {
                 <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">Sign in to your account</h2>
             </div>
             <Button isLoading={isLoading} variant='default' className="max-w-sm mx-auto w-full" onClick={loginWithGoogle}>
-            <svg
+            {isLoading?null:<svg
                 className='mr-2 h-4 w-4'
                 aria-hidden='true'
                 focusable='false'
@@ -46,7 +51,7 @@ const Page = () => {
                   fill='#EA4335'
                 />
                 <path d='M1 1h22v22H1z' fill='none' />
-              </svg>
+              </svg>}
               Google
             </Button>
         </div>
