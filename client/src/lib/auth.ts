@@ -55,9 +55,10 @@ export const authOptions:NextAuthOptions={
         //if there is a user already in the db
         // so we will first get the user from db by db.get(`user:${token.id}`)
         // this id is coming from the id that our redis upstash adapter has set while updating user to db
-        const dbUser=await (db.get(`user:${token.id}`)) as UserType | null
-
-
+        
+        
+        const dbUser=await (db.get(`user:${token.id}`)) as User | null
+        
         // if user doesnt exist in db 
         if(!dbUser){
             token.id=user!.id
@@ -84,7 +85,14 @@ export const authOptions:NextAuthOptions={
         //   whenever the user successfully signed in
         // we need to redirect them 
         redirect(){
-            return '/'
+            return 'https://quik-chat-nine.vercel.app/dashboard'
         }
     }  
 }
+
+
+
+
+
+
+
