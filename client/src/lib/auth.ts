@@ -30,7 +30,8 @@ export const authOptions:NextAuthOptions={
     // which will further helps us to protext the routes through passing this jwt to middleware
 
     session:{
-        strategy:'jwt'
+        strategy:"jwt",
+        maxAge:60*60*24*30
     },
 
     // this will help to create the custom pages of sig-in,sign-out etc...
@@ -85,9 +86,10 @@ export const authOptions:NextAuthOptions={
         //   whenever the user successfully signed in
         // we need to redirect them 
         redirect(){
-            return 'https://quik-chat-nine.vercel.app/dashboard'
+            return 'http://localhost:3000/dashboard'
         }
-    }  
+    },
+    secret:process.env.NEXTAUTH_SECRET, 
 }
 
 
