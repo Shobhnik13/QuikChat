@@ -32,13 +32,14 @@ const AddFriendButton = ({}:AddFriendButtonProps) => {
               //validating the email coming from input according to the addFriendSchema
   
               const validatedEmail=addFriendSchema.parse({email})
-  
+              // console.log(validatedEmail);
+              
               //now making a post request to the api route by provinding the email:validatedEmail to the route
-              await axios.post('api/friends/add',{
-                  email:validatedEmail
+              await axios.post('/api/friends/add',{
+                  email:validatedEmail,
               })
   
-              //if it is a success then updating state
+              // //if it is a success then updating state
               setSuccessRate(true)
           }catch(error:any){
               // console.log(error.message);
