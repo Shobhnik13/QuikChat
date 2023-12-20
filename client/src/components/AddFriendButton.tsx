@@ -55,7 +55,11 @@ const AddFriendButton = ({}:AddFriendButtonProps) => {
               //if the catch doesnt got caught in zod type zoderror
               //or the axios type axioserror
               //then there must be something else 
+              //no need to set success rate coz we need only error
               setError('email',{message:'Something went wrong'})
+          }finally{
+            //making that true state as false
+            setSuccessRate(false)
           }
         }
 
@@ -86,7 +90,7 @@ const AddFriendButton = ({}:AddFriendButtonProps) => {
                 <p className="mt-1 text-sm text-red-600">{errors.email?.message}</p>
                 {/* ONLY IF user enters successfully */}
                 {successRate ? (
-                    <p className="mt-1 text-sm text-red-600">Friend request sent successfully!</p>
+                    <p className="mt-1 text-sm text-green-600">Friend request sent successfully!</p>
                 ):(null)}
                 </form>
             </Form>

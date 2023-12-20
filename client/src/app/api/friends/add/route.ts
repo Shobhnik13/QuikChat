@@ -15,7 +15,7 @@ export async function POST(req:Request){
         
         const idToAdd=(await fetchRedis('get',`user:email:${emailToAdd}`)) as string
         if(!idToAdd){
-            throw new Response('This person does not exist!',{status:400})
+            return new Response('This person does not exist!',{status:400})
         }
         //now we are getting the email id that is calling this email to add as friend
         const session=await getServerSession(authOptions)
