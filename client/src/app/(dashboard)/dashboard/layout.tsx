@@ -1,3 +1,4 @@
+import SignOutButton from '@/src/components/SignOutButton'
 import { Icon, Icons } from '../../../components/Icons'
 import { authOptions } from '@/src/lib/auth'
 import { getServerSession } from 'next-auth'
@@ -5,6 +6,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import {FC,ReactNode} from 'react'
+import FriendRequestsSidebar from '@/src/components/FriendRequestsSidebar'
+import { fetchRedis } from '@/src/helper/redis'
 interface LayoutProps{
     children:ReactNode
 }
@@ -18,7 +21,11 @@ interface sideBarOptionsInterface{
 
 const Layout=async({children}:LayoutProps)=>{
     const session=await getServerSession(authOptions)
-    // if(!session) notFound()
+    if(!session) notFound()
+
+    const initialUnseenRequestCount=(await fetchRedis('smembers',`user:${session.user.id}:incoming_friend_requests`) as User[]).length
+
+
     const sideBarOptions:sideBarOptionsInterface[]=[
         {
             id:1,
@@ -67,6 +74,10 @@ const Layout=async({children}:LayoutProps)=>{
                                 })}
                             </ul>
                         </li>
+
+                        <li><FriendRequestsSidebar sessionId={session.user.id} initialUnseenRequestCount={initialUnseenRequestCount}/></li>
+
+
                         <li className='-mx-6 mt-auto flex items-center'>
               <div className='flex flex-1 items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900'>
                 <div className='relative h-8 w-8 bg-gray-50'>
@@ -87,7 +98,7 @@ const Layout=async({children}:LayoutProps)=>{
                   </span>
                 </div>
               </div>
-              {/* yaha se */}
+                    <SignOutButton />
             </li>
                     </ul>   
                 </nav>
