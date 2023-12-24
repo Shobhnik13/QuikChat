@@ -29,7 +29,7 @@ const RequestsPage = async() => {
             }
         })
         )
-        console.log(incomingFriendRequests);
+        // console.log(incomingFriendRequests);
     
   return (
     <main className="pt-8">
