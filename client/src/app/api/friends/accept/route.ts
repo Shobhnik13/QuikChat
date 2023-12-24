@@ -1,5 +1,7 @@
 import { fetchRedis } from "@/src/helper/redis";
 import { authOptions } from "@/src/lib/auth";
+import { db } from "@/src/lib/db";
+import { AxiosError } from "axios";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
 
@@ -27,13 +29,28 @@ export async function POST(req:Request){
         
         //checking that the wanna be added user sent a request to session or not
         const hasSentReq=(await fetchRedis('sismember',`user:${session.user.id}:incoming_friend_requests`,idToAdd))
-        // console.log('hi2');
+        // console.log('elvissssssssssss bhai!!!!!!!!!');
         
         // console.log(hasSentReq);
 
-        // if(YAHA SE NOT SENT REQ THEN NOT ADD ELSE ADD )
+        if(!hasSentReq){
+            return new Response('No friend request!',{status:400})
+        }
+        //now just add the friend -> session and vice versa
+
+        await db.sadd(`user:${session.user.id}:friends`,idToAdd)
+        await db.sadd(`user:${idToAdd}:friends`,session.user.id)
+        // now removing the added friend from the upcoming_friend_request
+        await db.srem(`user:${session.user.id}:incoming_friend_requests`,idToAdd)
+        
+        console.log('jdksjdksd')
+
         return new Response('OK',{status:200})
     }catch(error:any){
-        console.log(error);
+        if(error instanceof z.ZodError){
+            return new Response('Invalid request payload',{status:422})
+        }    
+
+        return new Response('Invalid request!',{status:400})
     }
 }

@@ -9,7 +9,7 @@ import { z } from "zod"
 export async function POST(req:Request){
     try{
         const body=await req.json()
-        console.log(body.email)
+        // console.log(body.email)
         const {email:emailToAdd} = addFriendSchema.parse(body.email)
         //checking that the entered mail is in db or not
         
