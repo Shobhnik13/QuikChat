@@ -39,7 +39,7 @@ export async function POST(req:Request){
         // this list will be showed to the emailtoadd list as incoming friend request
         const alreadyAdded=(await fetchRedis('sismember',`user:${idToAdd}:incoming_friend_requests`,session.user.id)) as 0|1
         if(alreadyAdded){
-            throw new Response(`User already added!`,{status:400})
+            throw new Response(`User already sent a request!`,{status:400})
         }
 
         // checking if they are friends already or not

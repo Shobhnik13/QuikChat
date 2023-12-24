@@ -17,7 +17,7 @@ const FriendRequests = ({allIncomingFriendRequests,sessionId}:FriendRequestsProp
 
     //accepting request
     const acceptFriend=async(senderId:string)=>{
-      await axios.post('/api/requests/accept',{id:senderId})
+      await axios.post('/api/friends/accept',{id:senderId})
       //setting state
       setFriendRequests((prev)=>prev.filter((request)=>request.senderId!==senderId))
       //refreshing page
@@ -26,7 +26,7 @@ const FriendRequests = ({allIncomingFriendRequests,sessionId}:FriendRequestsProp
 
     //denying request
     const denyFriend=async(senderId:string)=>{
-      await axios.post('/api/requests/deny',{id:senderId})
+      await axios.post('/api/friends/deny',{id:senderId})
       //setting state
       setFriendRequests((prev)=>prev.filter((request)=>request.senderId!==senderId))
       //refreshing page
@@ -45,6 +45,7 @@ const FriendRequests = ({allIncomingFriendRequests,sessionId}:FriendRequestsProp
             <p className='font-medium text-lg'>{request.senderEmail}</p>
 
             <button
+            onClick={()=>acceptFriend(request.senderId)}
               aria-label='accept request'
               className='w-8 h-8 bg-indigo-600 hover:bg-indigo-700 grid place-items-center rounded-full transition hover:shadow-md'>
               <Check className='font-semibold text-white w-3/4 h-3/4' />
