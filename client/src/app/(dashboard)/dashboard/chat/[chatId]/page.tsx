@@ -1,11 +1,27 @@
+import { fetchRedis } from "@/src/helper/redis"
 import { authOptions } from "@/src/lib/auth"
 import { db } from "@/src/lib/db"
+import { messageArraySchema } from "@/src/lib/validations/messages-validator"
 import { getServerSession } from "next-auth"
 import { notFound } from "next/navigation"
 
 interface ChatPageProps{
     params:{
         chatId:string,
+    }
+}
+async function getChatMessages(chatId:string) {
+    try{
+        const result:string[]=await fetchRedis('zrange',`chat:${chatId}:messages`,0,-1)
+        const dbMessages=result.map((message)=>JSON.parse(message) as Message)
+        //displaying message in reverse order coz we are fetching from 0th indx to end
+        //so the recent message will be at top but we need that at the end
+        const reversedDbMessages=dbMessages.reverse()
+        //validating it
+        const messages= messageArraySchema.parse(reversedDbMessages)
+        return messages
+    }catch(error:any){
+        notFound()
     }
 }
 
@@ -25,7 +41,8 @@ const page = async({params}:ChatPageProps) => {
     const chatFriendId=session.user.id===userId1?userId2:userId1
     //getting name for chatfriend
     const chatFriend=(await db.get(`user:${chatFriendId}`)) as User
-    
+    //getting chats
+    const initialMessages=await getChatMessages(chatId)
     return (
     <div>{chatId}</div>
   )
