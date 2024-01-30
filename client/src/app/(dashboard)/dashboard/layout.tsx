@@ -9,6 +9,7 @@ import {FC,ReactNode} from 'react'
 import FriendRequestsSidebar from '@/src/components/FriendRequestsSidebar'
 import { fetchRedis } from '@/src/helper/redis'
 import { getFriendsByUserId } from '@/src/helper/GetFriendsByUserId'
+import SideBarChatList from '@/src/components/SideBarChatList'
 interface LayoutProps{
     children:ReactNode
 }
@@ -50,7 +51,7 @@ const Layout=async({children}:LayoutProps)=>{
                     }
                 <nav className='flex flex-1 flex-col'>
                     <ul className='flex flex-1 flex-col gap-y-7' role='list'>
-                        <li>chats that this user has</li>
+                        <li><SideBarChatList friends={friends}/></li>
                         <li>
                             <div className='text-sm font-semibold leading-6 text-gray-400'>
                                 Overview
@@ -74,10 +75,10 @@ const Layout=async({children}:LayoutProps)=>{
                                     </li>
                                 )
                                 })}
-                            </ul>
-                        </li>
-
                         <li><FriendRequestsSidebar sessionId={session.user.id} initialUnseenRequestCount={initialUnseenRequestCount}/></li>
+                    </ul>
+                </li>
+
 
 
                         <li className='-mx-6 mt-auto flex items-center'>
