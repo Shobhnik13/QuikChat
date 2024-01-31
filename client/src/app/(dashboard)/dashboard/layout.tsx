@@ -51,7 +51,7 @@ const Layout=async({children}:LayoutProps)=>{
                     }
                 <nav className='flex flex-1 flex-col'>
                     <ul className='flex flex-1 flex-col gap-y-7' role='list'>
-                        <li><SideBarChatList friends={friends}/></li>
+                        <li><SideBarChatList sessionId={session.user.id} friends={friends}/></li>
                         <li>
                             <div className='text-sm font-semibold leading-6 text-gray-400'>
                                 Overview
