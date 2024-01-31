@@ -1,3 +1,4 @@
+import Messages from "@/src/components/Messages"
 import { fetchRedis } from "@/src/helper/redis"
 import { authOptions } from "@/src/lib/auth"
 import { db } from "@/src/lib/db"
@@ -77,6 +78,7 @@ const page = async({params}:ChatPageProps) => {
                 </div>
             </div>
         </div>
+        <Messages/>
     </div>
   )
 }
