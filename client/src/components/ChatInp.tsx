@@ -18,10 +18,12 @@ const ChatInp = ({ChatPartner,chatId}:chatInpProps) => {
     const [input,setInput]=useState<string>('')
     const [isLoading,setIsLoading]=useState<boolean>(false)
     const sendMessage=async()=>{
+        if(!input)return 
         setIsLoading(true)
         try{
             await axios.post('/api/message/send',{text:input,chatId})
             setInput('')
+            textAreRef.current?.focus()
         }catch(error:any){
             // console.log(error)
             toast.error('Something went wrong. Please try again later.')

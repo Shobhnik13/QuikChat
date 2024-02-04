@@ -21,7 +21,7 @@ const Messages = ({initialMessages,sessionId}:messageProps) => {
           // means 2-3 concurrent messages by same user
           // as here we are comparing that the prev message ie->n-1 of message array has a sender which is same as the curr message ie->n of message 
           // so messages[index-1].senderid:prevmessage === messages[index].senderid:currmessage as this is a concurrent message to prev message
-          const hasNextMessageFromSameUser= messages[index-1].senderId === messages[index].senderId
+          const hasNextMessageFromSameUser= messages[index-1]?.senderId === messages[index].senderId
           return <div key={`${message.id}-${message.timestamp}`}>
                     <div className={cn('flex items-end',{'justify-end':sentByCurrentUser})}>
                         <div className={cn('flex flex-col space-y-2 text-base max-w-xs mx-2',{'order-1 items-end':sentByCurrentUser, 'order-2 items-start':!sentByCurrentUser})}>
