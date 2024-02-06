@@ -13,13 +13,14 @@ interface FriendRequestsProps{
 }
 const FriendRequests = ({allIncomingFriendRequests,sessionId}:FriendRequestsProps) => {
     const router=useRouter()
-
+    console.log(sessionId);
+    
     //state for storing all requests
     const [friendRequests,setFriendRequests]=useState<IncomingFriendRequest[]>(allIncomingFriendRequests)
 
     //setting up sockets using pusher
     useEffect(()=>{
-      //subscribe to channel from backend route where we will get the data from
+      // subscribe to channel from backend route where we will get the data from
 
       pusherClient.subscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
       
@@ -27,7 +28,7 @@ const FriendRequests = ({allIncomingFriendRequests,sessionId}:FriendRequestsProp
         console.log('new friend request received!')
       }
       
-      //now bind the keyword or sentence u wanna show when this function(friendrequesthadnler) occurs
+      // now bind the keyword or sentence u wanna show when this function(friendrequesthadnler) occurs
       
       pusherClient.bind('incoming_friend_requests',friendRequestHandler)
       

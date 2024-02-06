@@ -6,6 +6,7 @@ import { notFound } from "next/navigation"
 
 const RequestsPage = async() => {
     const session=await getServerSession(authOptions)
+    // console.log(session?.user);
     
     if(!session) notFound()
     //ids of people who sent the friend-requests to the session id(currently logged in person) 

@@ -24,6 +24,8 @@ interface sideBarOptionsInterface{
 const Layout=async({children}:LayoutProps)=>{
     const session=await getServerSession(authOptions)
     if(!session) notFound()
+    // console.log(session.user);
+    
 
     const initialUnseenRequestCount=(await fetchRedis('smembers',`user:${session.user.id}:incoming_friend_requests`) as User[]).length
 
