@@ -1,6 +1,8 @@
 import { fetchRedis } from "@/src/helper/redis"
 import { authOptions } from "@/src/lib/auth"
 import { db } from "@/src/lib/db"
+import { pusherServer } from "@/src/lib/pusher"
+import { toPusherKey } from "@/src/lib/utils"
 import { addFriendSchema } from "@/src/lib/validations/add-friend"
 import { AxiosError } from "axios"
 import { getServerSession } from "next-auth"
@@ -55,6 +57,12 @@ export async function POST(req:Request){
         //this means the user ie logged in user(session) will be put in the list of friend requests incoming to the id that the sessions wants to add
         // ex-> abc(session) wants xyz(idtoadd) to be friends
         // so a request by abc(session) would be added in a list of incoming friend request to xyz(idtoadd)
+        //settting up sockets using pusher
+
+        pusherServer.trigger(toPusherKey(`user:${idToAdd}:incoming_friend_requests`),'incoming_friend_requests',{
+            senderId:session.user.id,
+            senderEmail:session.user.email,
+        })
         db.sadd(`user:${idToAdd}:incoming_friend_requests`,session.user.id)
         return new Response('OK',{status:200})
     }catch(error:any){
