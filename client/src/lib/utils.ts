@@ -7,8 +7,9 @@ export function cn(...inputs: ClassValue[]) {
 
 //as pusher client DO NOT ALLOW UNDERSCORES (user:sessionid:incoming_friend_requests)
 //so we will convert that underscore keys to another representation(/:) -> normal comma
-export function toPusherKey(key:string){
-  return key.replace(/:/g,'__')
+
+export function toPusherKey(key: string) {
+  return key.replace(/:/g, '__')
 }
 
 export function chatLinkConstructr(id1:string,id2:string){

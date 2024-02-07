@@ -13,31 +13,35 @@ interface FriendRequestsProps{
 }
 const FriendRequests = ({allIncomingFriendRequests,sessionId}:FriendRequestsProps) => {
     const router=useRouter()
-    console.log(sessionId);
+    // console.log(sessionId);
     
     //state for storing all requests
     const [friendRequests,setFriendRequests]=useState<IncomingFriendRequest[]>(allIncomingFriendRequests)
 
     //setting up sockets using pusher
-    useEffect(()=>{
+    // useEffect(()=>{
       // subscribe to channel from backend route where we will get the data from
 
-      pusherClient.subscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
+      // pusherClient.subscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
       
-      const friendRequestHandler=()=>{
-        console.log('new friend request received!')
-      }
+      // const friendRequestHandler = ({
+      // senderId,
+      // senderEmail,
+    // }: IncomingFriendRequest) => {
+      // console.log("function got called")
+      // setFriendRequests((prev) => [...prev, { senderId, senderEmail }])
+    // }
       
       // now bind the keyword or sentence u wanna show when this function(friendrequesthadnler) occurs
       
-      pusherClient.bind('incoming_friend_requests',friendRequestHandler)
+      // pusherClient.bind('incoming_friend_requests',friendRequestHandler)
       
       //now cleaning up the connection after returning 
-      return ()=>{
-          pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
-          pusherClient.unbind('incoming_friend_requests',friendRequestHandler)
-      }
-    })
+      // return ()=>{
+          // pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
+          // pusherClient.unbind('incoming_friend_requests',friendRequestHandler)
+      // }
+    // },[sessionId])
 
 
 
