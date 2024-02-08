@@ -11,6 +11,7 @@ interface FriendRequestsSidebarProps {
     sessionId: string,
 }
 
+
 const FriendRequestsSidebar = ({ initialUnseenRequestCount, sessionId }: FriendRequestsSidebarProps) => {
     const [unseenRequestCount, setUnseenRequestCount] = useState<number>(initialUnseenRequestCount)
 
