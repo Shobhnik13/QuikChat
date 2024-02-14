@@ -4,7 +4,6 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { pusherClient } from "../lib/pusher"
 import { toPusherKey } from "../lib/utils"
-// import { ErrorBoundary } from "react-error-boundary";
 
 interface FriendRequestsSidebarProps {
     initialUnseenRequestCount: number,
@@ -15,31 +14,10 @@ interface FriendRequestsSidebarProps {
 const FriendRequestsSidebar = ({ initialUnseenRequestCount, sessionId }: FriendRequestsSidebarProps) => {
     const [unseenRequestCount, setUnseenRequestCount] = useState<number>(initialUnseenRequestCount)
 
-    // useEffect(() => {
-        // Check if window is defined to ensure code execution on client-side only
-        // if (typeof window !== 'undefined') {
-            // Subscribing to the event
-            // pusherClient.subscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
-
-            // Function to handle incoming friend requests
-            // const friendRequestHandler = () => {
-                // setUnseenRequestCount(prev => prev + 1)
-            // }
-
-            // Binding the event handler
-            // pusherClient.bind('incoming_friend_requests', friendRequestHandler)
-
-            // Clean-up function to unsubscribe and unbind the event
-            // return () => {
-                // pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
-                // pusherClient.unbind('incoming_friend_requests', friendRequestHandler)
-            // }
-        // }
-    // }, [sessionId]) // Empty dependency array to ensure this effect runs only once on mount
+  
 
     return (
-      // <ErrorBoundary fallback={<div>Something went wrong</div>}>
- 
+    
         <div>
             <Link href={'/dashboard/friend-requests'}>
                 <a className='text-gray-700 hover:text-indigo-600 hover:bg-gray-50 group flex items-center gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'>
@@ -55,7 +33,7 @@ const FriendRequestsSidebar = ({ initialUnseenRequestCount, sessionId }: FriendR
                 </a>
             </Link>
         </div>
-      // </ErrorBoundary>
+     
     )
 }
 
