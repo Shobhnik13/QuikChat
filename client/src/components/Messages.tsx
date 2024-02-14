@@ -1,15 +1,22 @@
 'use client'
+import { format } from 'date-fns'
 
 import { useState } from "react"
 import { cn } from "../lib/utils"
+import Image from 'next/image'
 
 interface messageProps{
   initialMessages:Message[],
   sessionId:string,
+  chatFriend:User,
+  sessionImg:string | null| undefined
 }
 
-const Messages = ({initialMessages,sessionId}:messageProps) => {
+const Messages = ({initialMessages,sessionId,sessionImg,chatFriend}:messageProps) => {
   const [messages,setMessages]=useState<Message[]>(initialMessages)
+  const formatTimeStamp=(timestamp:number)=>{
+    return format(timestamp, 'HH:mm')
+  }
   return (
     <div id="messages" className="flex h-full flex-1 flex-col-reverse gap-4 p-3 overflow-y-auto">
       {messages.map((message,index)=>{
@@ -30,9 +37,25 @@ const Messages = ({initialMessages,sessionId}:messageProps) => {
                             'bg-gray-200 text-gray-900':!sentByCurrentUser 
                           })}>
                             {message.text}{' '}
-                            <span className="ml-2 text-xs text-gray-400">{message.timestamp}</span>
+                            <span className="ml-2 text-xs text-gray-400">{formatTimeStamp(message.timestamp)}</span>
                           </span>
                         </div>
+                        <div
+                className={cn('relative w-6 h-6', {
+                  'order-2': sentByCurrentUser,
+                  'order-1': !sentByCurrentUser,
+                  invisible: hasNextMessageFromSameUser,
+                })}>
+                <Image
+                  fill
+                  src={
+                    sentByCurrentUser ? (sessionImg as string) : chatFriend.image
+                  }
+                  alt='Profile picture'
+                  referrerPolicy='no-referrer'
+                  className='rounded-full'
+                />
+              </div>
                     </div>
                 </div>
            

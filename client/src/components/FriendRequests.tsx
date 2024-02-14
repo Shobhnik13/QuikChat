@@ -4,8 +4,6 @@ import axios from "axios"
 import { Check, UserPlus, X } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { pusherClient } from "../lib/pusher"
-import { toPusherKey } from "../lib/utils"
 
 interface FriendRequestsProps{
     allIncomingFriendRequests:IncomingFriendRequest[],
@@ -21,6 +19,7 @@ const FriendRequests = ({allIncomingFriendRequests,sessionId}:FriendRequestsProp
 
     //accepting request
     const acceptFriend=async(senderId:string)=>{
+      // console.log(senderId)
       await axios.post('/api/friends/accept',{id:senderId})
       //setting state
       setFriendRequests((prev)=>prev.filter((request)=>request.senderId!==senderId))

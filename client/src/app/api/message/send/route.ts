@@ -16,7 +16,7 @@ export async function POST(req:Request){
         const [userId1,userId2]=chatId.split('--')
 
         if(session.user.id !== userId1 && session.user.id !== userId2){
-                return new Response('Unauthrised',{status:401})
+                return new Response('Unauthorised',{status:401})
         }
         // extracting the friendid
         const friendId = session.user.id === userId1 ? userId2 : userId1
