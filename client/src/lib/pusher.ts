@@ -10,7 +10,7 @@ export const pusherServer= new PusherServer({
 })
 
 export const pusherClient= new PusherClient(
-    process.env.PUSHER_KEY!,{
+    'fc9efe00de7d6a66332f',{
         cluster:"ap2"
     }
 )

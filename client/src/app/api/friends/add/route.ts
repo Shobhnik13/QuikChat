@@ -62,7 +62,7 @@ export async function POST(req:Request){
             senderId:session.user.id,
             senderEmail:session.user.email,
         })
-        
+
         db.sadd(`user:${idToAdd}:incoming_friend_requests`,session.user.id)
         return new Response('OK',{status:200})
     }catch(error:any){
