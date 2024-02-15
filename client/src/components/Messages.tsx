@@ -1,22 +1,41 @@
 'use client'
 import { format } from 'date-fns'
 
-import { useState } from "react"
-import { cn } from "../lib/utils"
+import { useEffect, useState } from "react"
+import { cn, toPusherKey } from "../lib/utils"
 import Image from 'next/image'
+import { pusherClient } from '../lib/pusher'
 
 interface messageProps{
   initialMessages:Message[],
   sessionId:string,
   chatFriend:User,
-  sessionImg:string | null| undefined
+  sessionImg:string | null| undefined,
+  chatId:string,
 }
 
-const Messages = ({initialMessages,sessionId,sessionImg,chatFriend}:messageProps) => {
+const Messages = ({initialMessages,chatId,sessionId,sessionImg,chatFriend}:messageProps) => {
+
   const [messages,setMessages]=useState<Message[]>(initialMessages)
+  
   const formatTimeStamp=(timestamp:number)=>{
     return format(timestamp, 'HH:mm')
   }
+
+  useEffect(()=>{
+    pusherClient.subscribe(toPusherKey(`chat:${chatId}`))
+    
+    const messageHandler=(message:Message)=>{
+      setMessages((prev)=>[message,...prev])
+    }
+
+    pusherClient.bind('incoming-message',messageHandler)
+    return ()=>{
+      pusherClient.unsubscribe(toPusherKey(`chat:${chatId}`))
+      pusherClient.unbind('incoming-message',messageHandler)
+    }
+  },[chatId])
+
   return (
     <div id="messages" className="flex h-full flex-1 flex-col-reverse gap-4 p-3 overflow-y-auto">
       {messages.map((message,index)=>{
