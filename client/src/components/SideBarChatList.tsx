@@ -2,16 +2,45 @@
 
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
-import { chatLinkConstructr } from "../lib/utils"
+import { chatLinkConstructr, toPusherKey } from "../lib/utils"
+import { pusherClient } from "../lib/pusher"
 
 interface SideBarChatListProps{
     friends:User[],
     sessionId:string
 }
+
+interface NewMessage extends Message{
+    senderImg:string,
+    senderName:string   
+}
+
 const SideBarChatList = ({friends,sessionId}:SideBarChatListProps) => {
     const [unseenMessage,setUnseenMessage]=useState<Message[]>([])
     const router=useRouter()
     const pathname=usePathname()
+    useEffect(()=>{
+        pusherClient.subscribe(toPusherKey(`user:${sessionId}:chats`))
+        pusherClient.subscribe(toPusherKey(`user:${sessionId}:friends`))
+        const newMessageHandler=(message:NewMessage)=>{
+            console.log('new message',message);
+            
+        }
+        //whenever the new friend added in the sidebar list
+        //for ex pehle 1 friend tha ab 2 
+        // so just refresh page
+        const newFriendhandler=()=>{
+            router.refresh()
+        }
+        pusherClient.bind('new-message',newMessageHandler)
+        pusherClient.bind('new-friend',newFriendhandler)
+        return ()=>{
+            pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:chats`))
+            pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:friends`))
+            pusherClient.unbind('new-message',newMessageHandler)
+            pusherClient.unbind('new-friend',newFriendhandler)
+        }
+    },[])
     //will render only when the path that is chatting person changes(chatid in url)
     useEffect(()=>{
         //if the pathname includes chat word then the user is chatting with a person

@@ -50,8 +50,23 @@ export async function POST(req:Request){
 
         const message=messageSchema.parse(messageData)
 
+        // this server emits message to all clients in message.tsx component to display message
         await pusherServer.trigger(toPusherKey(`chat:${chatId}`), 'incoming-message', message)
         
+        // this server emits message that this user receives in any of his chats to show at frontend
+        // ex- abcd sent a message to xyz and efg also sent to xyz so this server will emit
+        // messages that are sent by abcd and efg to xyz
+        // so now we can show that these 2 are the new message or unseen message for xyz from abcd and efg resp.
+        await pusherServer.trigger(toPusherKey(`user:${friendId}:chats`),'new-message',{
+            // this means we will send a new TYPE of message which includes property of old message type
+            // ie id,senderid,recid,text,timestamp
+            // but also we attach img and name of sender for frontend to listen
+            // that we will show that who sent this new message as toast
+            ...message,
+            senderImg:parsedSender.image,
+            senderName:parsedSender.name,
+        })
+
         await db.zadd(`chat:${chatId}:messages`,{
             score:timestamp,
             member:JSON.stringify(message)
