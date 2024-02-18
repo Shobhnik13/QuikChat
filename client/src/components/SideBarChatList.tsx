@@ -4,6 +4,8 @@ import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { chatLinkConstructr, toPusherKey } from "../lib/utils"
 import { pusherClient } from "../lib/pusher"
+import toast from "react-hot-toast"
+import UnseenChatToast from "./UnseenChatToast"
 
 interface SideBarChatListProps{
     friends:User[],
@@ -23,8 +25,22 @@ const SideBarChatList = ({friends,sessionId}:SideBarChatListProps) => {
         pusherClient.subscribe(toPusherKey(`user:${sessionId}:chats`))
         pusherClient.subscribe(toPusherKey(`user:${sessionId}:friends`))
         const newMessageHandler=(message:NewMessage)=>{
-            console.log('new message',message);
-            
+            // we will be notifying only if we are not in chat url
+            const shouldNotify= pathname !== `/dashboard/chat/${chatLinkConstructr(sessionId,message.senderId)}`
+            if(!shouldNotify){
+                return 
+            }
+            //should be notified
+            toast.custom((t)=>(
+                <UnseenChatToast
+                t={t}
+                senderId={message.senderId}
+                sessionId={sessionId}
+                senderImg={message.senderImg}
+                senderName={message.senderName}
+                senderMessage={message.text}/>
+            ))
+                setUnseenMessage((prev)=>[...prev,message])
         }
         //whenever the new friend added in the sidebar list
         //for ex pehle 1 friend tha ab 2 
@@ -40,7 +56,9 @@ const SideBarChatList = ({friends,sessionId}:SideBarChatListProps) => {
             pusherClient.unbind('new-message',newMessageHandler)
             pusherClient.unbind('new-friend',newFriendhandler)
         }
-    },[])
+    },[pathname,router,sessionId])
+
+
     //will render only when the path that is chatting person changes(chatid in url)
     useEffect(()=>{
         //if the pathname includes chat word then the user is chatting with a person
