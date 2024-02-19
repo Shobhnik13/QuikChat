@@ -73,6 +73,11 @@ const AddFriendButton = ({}:AddFriendButtonProps) => {
         <div>
             <Form {...form}>
                 <form className="max-w-sm" onSubmit={form.handleSubmit(onSubmit)}>
+                <label
+                htmlFor='email'
+                className='block text-sm font-medium leading-6 text-gray-900'>
+                    Add friend by E-Mail
+                </label>
                 <FormField
                 control={form.control}
                 name="email"
