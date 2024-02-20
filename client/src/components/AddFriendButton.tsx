@@ -57,9 +57,6 @@ const AddFriendButton = ({}:AddFriendButtonProps) => {
               //then there must be something else 
               //no need to set success rate coz we need only error
               setError('email',{message:'Something went wrong'})
-          }finally{
-            //making that true state as false
-            setSuccessRate(false)
           }
         }
 

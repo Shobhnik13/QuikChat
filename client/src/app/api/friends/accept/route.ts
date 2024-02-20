@@ -1,6 +1,8 @@
 import { fetchRedis } from "@/src/helper/redis";
 import { authOptions } from "@/src/lib/auth";
 import { db } from "@/src/lib/db";
+import { pusherServer } from "@/src/lib/pusher";
+import { toPusherKey } from "@/src/lib/utils";
 import { AxiosError } from "axios";
 import { getServerSession } from "next-auth";
 import { z } from "zod";
@@ -38,12 +40,16 @@ export async function POST(req:Request){
         }
         //now just add the friend -> session and vice versa
 
+        //for adding friend in sidebarchatlist comp. and trigerring event of new friend to make that comp. refresh to show new added frined
+
+        await pusherServer.trigger(toPusherKey(`user:${idToAdd}:friends`),'new-friend',{})
+
         await db.sadd(`user:${session.user.id}:friends`,idToAdd)
         await db.sadd(`user:${idToAdd}:friends`,session.user.id)
         // now removing the added friend from the upcoming_friend_request
         await db.srem(`user:${session.user.id}:incoming_friend_requests`,idToAdd)
         
-        console.log('jdksjdksd')
+        // console.log('jdksjdksd')
 
         return new Response('OK',{status:200})
     }catch(error:any){

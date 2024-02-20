@@ -4,6 +4,7 @@ import Link from "next/link"
 import { useEffect, useState } from "react"
 import { pusherClient } from "../lib/pusher"
 import { toPusherKey } from "../lib/utils"
+import { useRouter } from "next/navigation"
 
 interface FriendRequestsSidebarProps {
     initialUnseenRequestCount: number,
@@ -13,20 +14,26 @@ interface FriendRequestsSidebarProps {
 
 const FriendRequestsSidebar = ({ initialUnseenRequestCount, sessionId }: FriendRequestsSidebarProps) => {
     const [unseenRequestCount, setUnseenRequestCount] = useState<number>(initialUnseenRequestCount)
-
+    const router=useRouter()
         useEffect(()=>{
        pusherClient.subscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
-
+       pusherClient.subscribe(toPusherKey(`user:${sessionId}:friends`))
         const friendRequestHandler=()=>{
             setUnseenRequestCount((prev)=>prev+1)
         }
-        
+
+        const addedFriendHandler=()=>{
+            router.refresh()   
+        }
         pusherClient.bind('incoming_friend_requests', friendRequestHandler)
+        pusherClient.bind('new-friend',addedFriendHandler)
         return ()=>{
             pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:incoming_friend_requests`))
+            pusherClient.unsubscribe(toPusherKey(`user:${sessionId}:friends`))
             pusherClient.unbind('incoming_friend_requests', friendRequestHandler)
+            pusherClient.unbind('new-friend',addedFriendHandler)
         }
-    },[sessionId])
+    },[sessionId,router])
     
     return (
     

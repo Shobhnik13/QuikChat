@@ -24,30 +24,30 @@ export async function POST(req:Request){
         // ALL EDGE CASES 
 
         if(!session){
-            throw new Response('Not authorised!',{status:401})
+            return new Response('Not authorised!',{status:401})
         }
         
         if(!idToAdd){
-            throw new Response('This person does not exist!',{status:400})
+            return new Response('This person does not exist!',{status:400})
         }
         
         //if the calling person id(session.user.id) and friend id is same
         if(session.user.id === idToAdd){
-            throw new Response('You can not add yourself as a friend!',{status:400})
+            return new Response('You can not add yourself as a friend!',{status:400})
         }
         
         // check if user is already sent a friend request or not
         // this list will be showed to the emailtoadd list as incoming friend request
         const alreadyAdded=(await fetchRedis('sismember',`user:${idToAdd}:incoming_friend_requests`,session.user.id)) as 0|1
         if(alreadyAdded){
-            throw new Response(`User already sent a request!`,{status:400})
+            return new Response(`Already added this user!`,{status:400})
         }
         
         // checking if they are friends already or not
         const alreadyFriend=(await fetchRedis('sismember',`user:${session.user.id}:friends`,idToAdd)) as 0|1
-        console.log('hiiii');
+        // console.log('hiiii');
         if(alreadyFriend){
-            throw new Response(`Users are already friends with each other!`,{status:400})
+            return new Response(`Users are already friends with each other!`,{status:400})
         }
 
         // logic for valid calling/adding 
@@ -63,7 +63,7 @@ export async function POST(req:Request){
             senderEmail:session.user.email,
         })
 
-        db.sadd(`user:${idToAdd}:incoming_friend_requests`,session.user.id)
+        await db.sadd(`user:${idToAdd}:incoming_friend_requests`,session.user.id)
         return new Response('OK',{status:200})
     }catch(error:any){
         // console.log(error)
