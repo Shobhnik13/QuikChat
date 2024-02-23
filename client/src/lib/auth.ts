@@ -86,7 +86,7 @@ export const authOptions:NextAuthOptions={
         //   whenever the user successfully signed in
         // we need to redirect them 
         redirect(){
-            return 'https://quik-chat-nine.vercel.app/dashboard'
+            return 'ch/dashboard'
         }
     },
     secret:'5TM/lGhe9/zDHkz4vOqp0nOBYamTF3uW5/4APS9KspE=', 
