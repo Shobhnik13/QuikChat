@@ -2,3 +2,4 @@
     senderId:string
     senderEmail:string | null,
  }
+ 
