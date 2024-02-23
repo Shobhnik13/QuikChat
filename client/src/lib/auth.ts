@@ -5,8 +5,8 @@ import GoogleProvider from 'next-auth/providers/google'
 
 // exporting google credentials 
 function getGoogleCreds(){
-    const clientId=process.env.GOOGLE_CLIENT_ID
-    const clientSecret=process.env.GOOGLE_CLIENT_SECRET
+    const clientId='900551127322-s4fniccsbs9r741k1conn0814aj0djtv.apps.googleusercontent.com'
+    const clientSecret='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'
 
     if(!clientId || clientId.length === 0){
         throw new Error('MISSING GOOGLE CLIENT ID!')
@@ -89,7 +89,7 @@ export const authOptions:NextAuthOptions={
             return '/dashboard'
         }
     },
-    secret:process.env.NEXTAUTH_SECRET, 
+    secret:'5TM/lGhe9/zDHkz4vOqp0nOBYamTF3uW5/4APS9KspE=', 
 }
 
 
