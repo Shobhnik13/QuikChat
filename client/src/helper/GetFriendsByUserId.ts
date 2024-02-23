@@ -1,4 +1,3 @@
-import { promise } from "zod"
 import { fetchRedis } from "./redis"
 
 export const getFriendsByUserId=async(userId:string)=>{
