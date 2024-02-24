@@ -86,7 +86,7 @@ export const authOptions:NextAuthOptions={
         //   whenever the user successfully signed in
         // we need to redirect them 
         redirect(){
-            return 'http://localhost:3000/dashboard'
+            return 'https://dashboard/api/auth/callback/google/dashboard'
         }
     },
     secret:'5TM/lGhe9/zDHkz4vOqp0nOBYamTF3uW5/4APS9KspE=', 
