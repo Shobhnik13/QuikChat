@@ -41,14 +41,31 @@ export async function POST(req:Request){
         //now just add the friend -> session and vice versa
 
         //for adding friend in sidebarchatlist comp. and trigerring event of new friend to make that comp. refresh to show new added frined
+        const [userRaw,friendRaw]=await Promise.all(
+            [
+                    fetchRedis('get',`user:${session.user.id}`),
+                    fetchRedis('get',`user:${idToAdd}`)
+            ]
+        ) as [string,string]
 
-        await pusherServer.trigger(toPusherKey(`user:${idToAdd}:friends`),'new-friend',{})
+            const user=JSON.parse(userRaw) as User
+            const friend=JSON.parse(friendRaw) as User
 
-        await db.sadd(`user:${session.user.id}:friends`,idToAdd)
-        await db.sadd(`user:${idToAdd}:friends`,session.user.id)
-        // now removing the added friend from the upcoming_friend_request
-        await db.srem(`user:${session.user.id}:incoming_friend_requests`,idToAdd)
-        
+        await Promise.all([
+            pusherServer.trigger(
+              toPusherKey(`user:${idToAdd}:friends`),
+              'new-friend',
+              user
+            ),
+            pusherServer.trigger(
+              toPusherKey(`user:${session.user.id}:friends`),
+              'new-friend',
+              friend
+            ),
+            db.sadd(`user:${session.user.id}:friends`, idToAdd),
+            db.sadd(`user:${idToAdd}:friends`, session.user.id),
+            db.srem(`user:${session.user.id}:incoming_friend_requests`, idToAdd),
+          ])
         // console.log('jdksjdksd')
 
         return new Response('OK',{status:200})

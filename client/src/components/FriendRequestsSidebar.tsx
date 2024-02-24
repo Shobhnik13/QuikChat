@@ -23,8 +23,9 @@ const FriendRequestsSidebar = ({ initialUnseenRequestCount, sessionId }: FriendR
         }
 
         const addedFriendHandler=()=>{
-            router.refresh()   
+            setUnseenRequestCount((prev) => prev - 1)   
         }
+
         pusherClient.bind('incoming_friend_requests', friendRequestHandler)
         pusherClient.bind('new-friend',addedFriendHandler)
         return ()=>{
