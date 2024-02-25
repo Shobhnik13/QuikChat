@@ -10,6 +10,7 @@ interface Chat{
     messages:Message[]
 }
 
+
 interface friendRequest{
     id:string,
     senderId:string,
