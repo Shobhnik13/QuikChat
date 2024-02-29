@@ -68,7 +68,7 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     redirect() {
-      return '/dashboard'
+      return 'http://localhost:3000/dashboard'
     },
   },
 }
