@@ -6,12 +6,13 @@ import { ChevronRight } from 'lucide-react'
 import { getServerSession } from 'next-auth'
 import Image from 'next/image'
 import Link from 'next/link'
+import { redirect } from 'next/navigation'
 import { notFound } from 'next/navigation'
 import React from 'react'
 
 const Page = async() => {
   const session=await getServerSession(authOptions) 
-  if(!session) return notFound()  
+  if(!session) redirect('/login')  
 
   const friends=await getFriendsByUserId(session.user.id)
   const friendsWithRecentMessage=await Promise.all(

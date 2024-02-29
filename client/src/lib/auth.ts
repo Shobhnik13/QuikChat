@@ -71,4 +71,5 @@ export const authOptions: NextAuthOptions = {
       return 'http://localhost:3000/dashboard'
     },
   },
+  // secret:'5TM/lGhe9/zDHkz4vOqp0nOBYamTF3uW5/4APS9KspE=', 
 }

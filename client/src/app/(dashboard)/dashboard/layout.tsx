@@ -4,7 +4,7 @@ import { authOptions } from '@/src/lib/auth'
 import { getServerSession } from 'next-auth'
 import Image from 'next/image'
 import Link from 'next/link'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import {FC,ReactNode} from 'react'
 import FriendRequestsSidebar from '@/src/components/FriendRequestsSidebar'
 import { fetchRedis } from '@/src/helper/redis'
@@ -19,7 +19,7 @@ interface LayoutProps{
 
 const Layout=async({children}:LayoutProps)=>{
     const session=await getServerSession(authOptions)
-    if(!session) notFound()
+    if(!session) redirect('/login')
     // console.log(session.user);
     
 

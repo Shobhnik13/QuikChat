@@ -2,13 +2,14 @@ import FriendRequests from "@/src/components/FriendRequests"
 import { fetchRedis } from "@/src/helper/redis"
 import { authOptions } from "@/src/lib/auth"
 import { getServerSession } from "next-auth"
+import { redirect } from "next/navigation"
 import { notFound } from "next/navigation"
 
 const RequestsPage = async() => {
     const session=await getServerSession(authOptions)
     // console.log(session?.user);
     
-    if(!session) notFound()
+    if(!session) redirect('/login')
     //ids of people who sent the friend-requests to the session id(currently logged in person) 
     const incomingSenderIds=(await fetchRedis('smembers',`user:${session.user.id}:incoming_friend_requests`)) as string[]
     // console.log(incomingSenderIds)
