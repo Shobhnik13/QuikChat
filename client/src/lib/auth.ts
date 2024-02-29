@@ -68,7 +68,7 @@ export const authOptions: NextAuthOptions = {
       return session
     },
     redirect() {
-      return 'https://quik-chat-nine.vercel.app/dashboard'
+      return '/dashboard'
     },
   },
   // secret:'5TM/lGhe9/zDHkz4vOqp0nOBYamTF3uW5/4APS9KspE=', 
